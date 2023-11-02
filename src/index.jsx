@@ -84,6 +84,15 @@ import Homefour from './pages/Homefour';
 import { BrowserRouter, Switch, Route, Routes } from 'react-router-dom';
 import * as serviceWorker from './serviceWorker';
 
+
+
+
+import Home from './pages/student/Home';
+import Subjects from './pages/student/Subjects';
+import Qna from './pages/student/Qna';
+import Forums from './pages/student/Forums';
+import ViewForum from './pages/student/ViewForum';
+
 class Root extends Component {
   render() {
     return (
@@ -440,6 +449,40 @@ class Root extends Component {
             path={`${process.env.PUBLIC_URL}/home-2`}
             element={<Hometwo/>}
           />
+
+
+
+          {/* user */}
+          <Route
+            exact
+            path={`${process.env.PUBLIC_URL}/`}
+            element={<Login/>}
+          />
+          <Route
+            exact
+            path={`${process.env.PUBLIC_URL}/home`}
+            element={<Home/>}
+          />
+          <Route
+            exact
+            path={`${process.env.PUBLIC_URL}/subjects`}
+            element={<Subjects/>}
+          />
+          <Route
+            exact
+            path={`${process.env.PUBLIC_URL}/school_qna`}
+            element={<Qna/>}
+          />
+          <Route
+            exact
+            path={`${process.env.PUBLIC_URL}/school_forums`}
+            element={<Forums/>}
+          />
+          <Route
+            exact
+            path={`${process.env.PUBLIC_URL}/school_view_forum`}
+            element={<ViewForum/>}
+          />
         </Routes>
       </BrowserRouter>
     );
@@ -448,3 +491,58 @@ class Root extends Component {
 
 ReactDOM.render(<Root />, document.getElementById('root'));
 serviceWorker.register();
+
+
+
+
+
+
+
+
+
+
+
+// import React from 'react'
+// import ReactDOM from 'react-dom/client'
+// import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+// import * as serviceWorker from './serviceWorker';
+// import Demo from './demo/Demo';
+// import Admin from './pages/Admin';
+// import Default from './pages/Default';
+// import Defaultchannel from './pages/Defaultchannel';
+// import Defaultfollower from './pages/Defaultfollower';
+
+// import Home from './pages/users/Home';
+
+
+// const router = createBrowserRouter([
+//   {
+//     path: `${process.env.PUBLIC_URL}/`,
+//     element: <Home />,
+//   },
+//   {
+//     path: `${process.env.PUBLIC_URL}/student`,
+//     element: <Home />,
+//   },
+//   {
+//     path: `${process.env.PUBLIC_URL}/default`,
+//     element: <Default />,
+//   },
+//   {
+//     path: `${process.env.PUBLIC_URL}/default-follower`,
+//     element: <Defaultfollower />,
+//   },
+//   {
+//     path: `${process.env.PUBLIC_URL}/default-channel`,
+//     element: <Defaultchannel />,
+//   },
+// ]);
+
+// ReactDOM.createRoot(document.getElementById('root')).render(
+//   <React.StrictMode>
+//       <RouterProvider router={router} />
+//   </React.StrictMode>,
+// )
+// serviceWorker.register();
+
+

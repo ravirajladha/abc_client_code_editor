@@ -9,13 +9,18 @@ class Register extends Component {
             <div
               className="col-xl-5 d-none d-xl-block p-0 vh-100 bg-image-cover bg-no-repeat"
               style={{
-                backgroundImage: `url("https://via.placeholder.com/800x950.png")`,
+                backgroundImage: `url("https://img.freepik.com/free-photo/smiley-woman-holding-book-front-view_23-2149915887.jpg?w=740&t=st=1680948722~exp=1680949322~hmac=f11745674cdd4603e26546821f6cf0dd0d93a8e00c9d7b35bd149bc003461def")`,
               }}
             ></div>
 
             <div className="col-xl-7 vh-100 align-items-center d-flex bg-white rounded-lg overflow-hidden">
               <div className="card shadow-none border-0 ml-auto mr-auto login-card">
                 <div className="card-body rounded-0 text-left">
+                <img 
+              src="assets/images/abc_logo.png"
+                            alt="logo"
+                            className="" width={100}
+                          /><br/>
                   <h2 className="fw-700 display1-size display2-md-size mb-4">
                     Create <br />
                     your account
@@ -37,6 +42,14 @@ class Register extends Component {
                         placeholder="Your Email Address"
                       />
                     </div>
+                    <div className="form-group icon-input mb-1">
+                      <input
+                        type="number"
+                        className="style2-input pl-5 form-control text-grey-900 font-xss ls-3"
+                        placeholder="Your Phone Number"
+                      />
+                      <i className="font-sm feather-phone text-grey-500 pr-0"></i>
+                    </div>
                     <div className="form-group icon-input mb-3">
                       <input
                         type="Password"
@@ -45,14 +58,7 @@ class Register extends Component {
                       />
                       <i className="font-sm ti-lock text-grey-500 pr-0"></i>
                     </div>
-                    <div className="form-group icon-input mb-1">
-                      <input
-                        type="Password"
-                        className="style2-input pl-5 form-control text-grey-900 font-xss ls-3"
-                        placeholder="Confirm Password"
-                      />
-                      <i className="font-sm ti-lock text-grey-500 pr-0"></i>
-                    </div>
+                    
                     <div className="form-check text-left mb-3">
                       <input
                         type="checkbox"

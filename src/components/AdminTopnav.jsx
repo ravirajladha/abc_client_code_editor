@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Darkbutton from '../components/Darkbutton';
-import Sidebartoggle from '../components/Sidebartoggle';
+import Darkbutton from './Darkbutton';
+import Sidebartoggle from './Sidebartoggle';
 
   function AdminTopnav() {
     return (

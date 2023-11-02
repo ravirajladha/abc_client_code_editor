@@ -1,0 +1,11 @@
+/* search result */
+.result {
+    max-height: 200px;
+    position: absolute;
+    z-index: 20;
+    top: -10px;
+}
+.result p{
+    padding-left: 30px;
+    font-weight: 500;
+}

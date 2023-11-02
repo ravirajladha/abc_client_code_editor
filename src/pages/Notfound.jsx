@@ -3,8 +3,7 @@ import Header from '../components/Header';
 import Upperheader from '../components/Upperheader';
 import Footer from '../components/Footer';
 
-class Notfound extends Component {
-  render() {
+  function Notfound() {
     return (
       <Fragment>
         <Upperheader />
@@ -42,6 +41,6 @@ class Notfound extends Component {
       </Fragment>
     );
   }
-}
+
 
 export default Notfound;
