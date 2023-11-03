@@ -19,7 +19,7 @@ import { Link, NavLink } from 'react-router-dom';
                 Elomoas.
               </span> */}
               <img 
-              src="assets/images/abc_logo.png"
+              src="/assets/images/abc_logo.png"
                             alt="logo"
                             className="" width={60}
                           />

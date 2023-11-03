@@ -9,6 +9,7 @@ import Subscribe from '../../components/Subscribe';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SearchResults from '../../components/SearchResults';
+import { Link } from 'react-router-dom';
 
 function Qna() {
     const baseUrl = process.env.REACT_APP_BASE_URL;
@@ -80,7 +81,7 @@ function Qna() {
 
     const [allQnas, setAllQnas] = useState([]);
     function search(name) {
-        setSearchValue(name);
+        setQnaValue(name);
         if (name.trim() === "") {
             // If the search input is empty or only contains spaces, clear the results
             setAllQnas([]);
@@ -94,9 +95,11 @@ function Qna() {
         }
     }
 
-    const [searchValue, setSearchValue] = useState([]);
-    function handleResultClick(selectedValue) {
-        setSearchValue(selectedValue); 
+    const [qnaValue, setQnaValue] = useState([]);
+    const [qnaId, setQnaId] = useState([]);
+    function handleResultClick(selectedValue, selectedId) {
+        setQnaValue(selectedValue); 
+        setQnaId(selectedId); 
         // setAllQnas([]);
       }
     return (
@@ -121,13 +124,13 @@ function Qna() {
                                                 className="style1-input bg-transparent border-0 pl-5 font-xsss mb-0 text-grey-500 fw-500"
                                                 placeholder="Search questions.."
                                                 onChange={(e) => search(e.target.value)}
-                                                value={searchValue}
+                                                value={qnaValue}
                                             ></input>
                                         </div>
                                     </div>
                                     <div className="col-lg-2 col-2">
-                                        <a href="" id="search-button"
-                                            className="w-100 d-block btn bg-current text-white font-xssss fw-600 ls-3 style1-input p-3 border-0 text-uppercase ">Search</a>
+                                        <Link to={"/school_qna/view_qna/"+qnaId} id="search-button"
+                                            className="w-100 d-block btn bg-current text-white font-xssss fw-600 ls-3 style1-input p-3 border-0 text-uppercase ">Search</Link>
                                     </div>
                                 </div>
                                 {allQnas && allQnas.length > 0 && <SearchResults results={allQnas} onResultClick={handleResultClick} />}

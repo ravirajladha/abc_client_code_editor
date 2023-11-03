@@ -92,6 +92,8 @@ import Subjects from './pages/student/Subjects';
 import Qna from './pages/student/Qna';
 import Forums from './pages/student/Forums';
 import ViewForum from './pages/student/ViewForum';
+import ViewQna from './pages/student/ViewQna';
+import AnswerForum from './pages/student/AnswerForum';
 
 class Root extends Component {
   render() {
@@ -480,8 +482,18 @@ class Root extends Component {
           />
           <Route
             exact
-            path={`${process.env.PUBLIC_URL}/school_view_forum`}
+            path={`${process.env.PUBLIC_URL}/school_qna/view_qna/:qnaId`}
+            element={<ViewQna/>}
+          />
+          <Route
+            exact
+            path={`${process.env.PUBLIC_URL}/school_forums/view_forum/:forumId`}
             element={<ViewForum/>}
+          />
+          <Route
+            exact
+            path={`${process.env.PUBLIC_URL}/school_forums/answer_forum/:forumId`}
+            element={<AnswerForum/>}
           />
         </Routes>
       </BrowserRouter>

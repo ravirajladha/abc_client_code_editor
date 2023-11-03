@@ -10,6 +10,9 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SearchResults from '../../components/SearchResults';
 
+import { Link } from 'react-router-dom';
+
+
 function Forums() {
     const baseUrl = process.env.REACT_APP_BASE_URL;
 
@@ -76,8 +79,11 @@ function Forums() {
     }
 
     const [searchValue, setSearchValue] = useState([]);
-    function handleResultClick(selectedValue) {
+    const [forumId, setForumId] = useState([]);
+    function handleResultClick(selectedValue, selectedId) {
         setSearchValue(selectedValue); // Set the input field value to the selected result
+        setForumId(selectedId); 
+
       }
 
     return (
@@ -104,8 +110,8 @@ function Forums() {
                                         </div>
                                     </div>
                                     <div className="col-lg-2 col-2">
-                                        <a href="/school_view_forum" id="search-button"
-                                            className="w-100 d-block btn bg-current text-white font-xssss fw-600 ls-3 style1-input p-3 border-0 text-uppercase ">Search</a>
+                                    <Link to={"/school_forums/view_forum/"+forumId} id="search-button"
+                                            className="w-100 d-block btn bg-current text-white font-xssss fw-600 ls-3 style1-input p-3 border-0 text-uppercase ">Search</Link>
                                     </div>
                                 </div>
                                 {allForums && allForums.length > 0 && <SearchResults results={allForums} onResultClick={handleResultClick} />}
