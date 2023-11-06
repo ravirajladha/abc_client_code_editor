@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { saveUserToSessionStorage } from './util/SessionStorage'
+
   function Login() {
     const baseUrl = process.env.REACT_APP_BASE_URL;
 
@@ -32,9 +34,8 @@ import 'react-toastify/dist/ReactToastify.css';
                 toast.error(resp.msg);
             } else {
                     toast.success('Success');
-                    sessionStorage.setItem('rexkod_user_id',resp.user.id);
-                    sessionStorage.setItem('rexkod_user_type',resp.user.type);
-                    sessionStorage.setItem('rexkod_user',JSON.stringify(resp));
+                    saveUserToSessionStorage(resp);
+                    console.log(resp);
                     usenavigate('/home')
             }
         }).catch((err) => {

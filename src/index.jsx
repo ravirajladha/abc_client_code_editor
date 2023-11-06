@@ -94,6 +94,9 @@ import Forums from './pages/student/Forums';
 import ViewForum from './pages/student/ViewForum';
 import ViewQna from './pages/student/ViewQna';
 import AnswerForum from './pages/student/AnswerForum';
+import Settings from './pages/student/Settings';
+import StudentRoute from './pages/util/StudentRoute';
+import SubjectStream from './pages/student/SubjectStream';
 
 class Root extends Component {
   render() {
@@ -311,7 +314,6 @@ class Root extends Component {
             path={`${process.env.PUBLIC_URL}/default-live-stream`}
             element={<Defaultlive/>}
           />
-
           <Route
             exact
             path={`${process.env.PUBLIC_URL}/default-channel`}
@@ -463,7 +465,7 @@ class Root extends Component {
           <Route
             exact
             path={`${process.env.PUBLIC_URL}/home`}
-            element={<Home/>}
+            element={<StudentRoute element={<Home />} />}
           />
           <Route
             exact
@@ -494,6 +496,16 @@ class Root extends Component {
             exact
             path={`${process.env.PUBLIC_URL}/school_forums/answer_forum/:forumId`}
             element={<AnswerForum/>}
+          />
+          <Route
+            exact
+            path={`${process.env.PUBLIC_URL}/settings`}
+            element={<Settings/>}
+          />
+          <Route
+            exact
+            path={`${process.env.PUBLIC_URL}/subject_stream/:subjectId`}
+            element={<SubjectStream/>}
           />
         </Routes>
       </BrowserRouter>

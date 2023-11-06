@@ -5,6 +5,7 @@ import Appheader from '../../components/Appheader';
 import Profile from '../../components/Profile';
 import Myclass from '../../components/Myclass';
 import Subscribe from '../../components/Subscribe';
+import { Link } from 'react-router-dom';
 
 
   function Subjects() {
@@ -40,14 +41,14 @@ import Subscribe from '../../components/Subscribe';
                   {subjects.map((value, index) => (
                     <div className="col-xl-4 col-lg-6 col-md-6" key={index}>
                       <div className="card mb-4 d-block w-100 shadow-xss rounded-lg p-xxl-5 p-4 border-0 text-center">
-                        <a
-                          href="/default-channel"
+                        <Link
+                          to={"#"}
                           className="position-absolute right-0 mr-4 top-0 mt-3"
                         >
                           <i className="ti-more text-grey-500 font-xs"></i>
-                        </a>
-                        <a
-                          href="/default-channel"
+                        </Link>
+                        <Link
+                          to={"/subject_stream/"+value.id}
                           className="btn-round-xxxl rounded-lg bg-lightblue ml-auto mr-auto"
                         >
                           <img
@@ -55,7 +56,7 @@ import Subscribe from '../../components/Subscribe';
                             alt="icon"
                             className="p-1 w-100"
                           />
-                        </a>
+                        </Link>
                         <h4 className="fw-700 font-xs mt-4">{value.subject_name}</h4>
                         {/* <p className="fw-500 font-xssss text-grey-500 mt-3">
                           {value.des}
@@ -69,14 +70,14 @@ import Subscribe from '../../components/Subscribe';
                           </span>
                         
                         <div className="clearfix"></div>
-                        <a
-                          href="/default-channel"
+                        <Link
+                          to={"/subject_stream/"+value.id}
                           className="p-2 mt-4 mr-1 d-inline-block text-white fw-700 lh-30 rounded-lg w100 text-center font-xsssss ls-3 bg-current"
                         >
                           LEARN
-                        </a>
+                        </Link>
                         <a
-                          href="/default-channel"
+                          href="#"
                           className="p-2 mt-4 d-inline-block text-white fw-700 lh-30 rounded-lg w100 text-center font-xsssss ls-3 bg-current"
                         >
                           TAKE TEST

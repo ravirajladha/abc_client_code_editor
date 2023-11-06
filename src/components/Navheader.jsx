@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import {clearSessionStorage} from '../pages/util/SessionStorage';
+
 
   function Navheader() {
   const [isOpen, setIsOpen] = useState(false);
@@ -7,6 +9,16 @@ import { Link, NavLink } from 'react-router-dom';
   const toggleOpen = () => setIsOpen(!isOpen);
 
   const navClass = `${isOpen ? ' nav-active' : ''}`;
+
+  const navigate = useNavigate();
+
+  const logout = () => {
+    // Clear user data from session storage
+    clearSessionStorage();
+    // Redirect to the login pagfe or perform any other necessary logout actions.
+    console.log(122);
+    navigate('/');
+  };
 
     return (
       <nav className={`navigation scroll-bar menu-active ${navClass}`} style={{ zIndex: 999 }}>
@@ -90,7 +102,7 @@ import { Link, NavLink } from 'react-router-dom';
             <li className="logo d-none d-xl-block d-lg-block"></li>
             <li>
               <Link
-                to="/default-settings"
+                to="/settings"
                 className="nav-content-bttn open-font h-auto pt-2 pb-2"
               >
                 <i className="font-sm feather-settings mr-3 text-grey-500"></i>
@@ -99,7 +111,8 @@ import { Link, NavLink } from 'react-router-dom';
             </li>
             <li>
               <Link
-                to="/logout"
+               
+                onClick={logout}
                 className="nav-content-bttn open-font h-auto pt-2 pb-2"
               >
                 <i className="font-sm feather-log-out mr-3 text-grey-500"></i>
