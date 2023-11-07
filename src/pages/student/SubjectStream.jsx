@@ -5,8 +5,9 @@ import Appheader from '../../components/Appheader';
 import Profile from '../../components/Profile';
 import Myclass from '../../components/Myclass';
 import Subscribe from '../../components/Subscribe';
+import "../../css/custom.css"
 
-import { Tabs, Tab } from 'react-bootstrap';
+import { Tabs, Tab, Accordion } from 'react-bootstrap';
 
 
 
@@ -36,23 +37,25 @@ function SubjectStream() {
             noteContentRef.current.scrollTop = noteContentRef.current.scrollHeight;
         }
 
-        subjectDetails();
-    }, [activeTab]);
+    }, []);
 
 
     // video player
+    const [activeVideoId, setActiveVideoId] = useState({});
+    const [matchVideo, setMatchVideo] = useState({});
     const playerRef = React.useRef(null);
-
-    const videoJsOptions = {
+    const [videoJsOptions, setVideoJsOptions] = useState({
         autoplay: false,
         controls: true,
         responsive: true,
         fluid: true,
-        sources: [{
-            src: 'https://abc.kods.app/uploads/SHGV1684912023.mp4',
-            type: 'video/mp4'
-        }]
-    };
+        sources: [],
+      });
+
+    
+    const videos = document.querySelectorAll('.video');
+    // const main_video_title = document.querySelector('.title');
+    const [mainVideoTitle, setMainVideoTitle] = useState('');
 
     const handlePlayerReady = (player) => {
         playerRef.current = player;
@@ -67,6 +70,44 @@ function SubjectStream() {
         // });
     };
 
+  
+
+    const handleVideoClick = (videoId, videoFile, videoName) => {
+        videos.forEach((video) => {
+          video.classList.remove('active');
+          video.querySelector('i').classList.remove('pause');
+        });
+    
+        const newSources = [
+          {
+            src: baseUrl + videoFile,
+            type: 'video/mp4',
+          },
+        ];
+    
+        setVideoJsOptions((prevOptions) => ({
+          ...prevOptions,
+          sources: newSources,
+        }));
+    
+        setActiveVideoId(videoId);
+        setMatchVideo({ id: videoId, video_file: videoFile, video_name: videoName });
+      };
+
+      useEffect(() => {
+        // Initialize Video.js options
+        setVideoJsOptions((prevOptions) => ({
+          ...prevOptions,
+          sources: [
+            {
+              src: baseUrl + matchVideo.video_file,
+              type: 'video/mp4',
+            },
+          ],
+        }));
+        setMainVideoTitle(matchVideo.video_name)
+      }, [matchVideo]);
+
     const [allSubjectData, setAllSubjectData] = useState([]);
     function subjectDetails() {
         fetch(baseUrl + "api/subject_stream/" + userId + "/" + subjectId, {
@@ -79,14 +120,28 @@ function SubjectStream() {
             return res.json();
         }).then((resp) => {
             setAllSubjectData(resp);
-            console.log(resp.assesments_given);
-
+            // console.log(resp.merged_messages);
+            // console.log(resp.mini_projects);
+            setActiveVideoId(resp && resp.video_details.id);
+            setMainVideoTitle(resp && resp.video_details.video_name)
+            const defaultSources = [
+                {
+                  src: baseUrl + resp.video_details.video_file,
+                  type: 'video/mp4',
+                },
+              ];
+          
+              setVideoJsOptions((prevOptions) => ({
+                ...prevOptions,
+                sources: defaultSources,
+              }));
         });
     }
     useEffect(() => {
         subjectDetails();
     }, []);
 
+    
     return (
         <>
             <div className="main-wrapper">
@@ -111,131 +166,166 @@ function SubjectStream() {
                                             className="mb-3 list-inline-center d-block text-center border-0"
                                         >
                                             <Tab eventKey="course" title="COURSE" className="list-inline-item">
-                                                <div className="messages-content chat-wrapper scroll-bar p-3"
+                                                {/* <div className="messages-content chat-wrapper scroll-bar p-3"
+                                                    style={{ height: 400 }}> */}
+                                                {/* <h1>tab1</h1> */}
+                                                <div className="video-playlist shadow-xss"
                                                     style={{ height: 400 }}>
-                                                    <h1>tab1</h1>
+                                                    <p className="text-dark fw-300 font-xss">2 &nbsp; Videos</p>
+                                                    <div className="videos scroll-bar" >
+                                                        {/* <div id="accordion" className="accordion mb-0">
+
+                                                                <div className="card shadow-xss mb-0">
+                                                                    <div className="card-header bg-greylight theme-dark-bg" id="heading">
+                                                                        <h5 className="mb-0"><button className="btn font-xsss fw-600 btn-link " data-toggle="collapse" data-target="#collapse" aria-expanded="false" aria-controls="collapse">abcd</button></h5>
+                                                                    </div>
+
+                                                                    <div id="collapse" className="collapse" aria-labelledby="heading" data-parent="#accordion">
+                                                                        <div className="card-body p-2">
+
+                                                                            <ul className="list-unstyled">
+                                                                                <li className="video " data-id="">
+                                                                                    <div className="d-flex flex-column">
+                                                                                        <div>
+                                                                                            <img src="/assets/images/play.svg" alt="" />
+                                                                                            <div className='ml-2'><span className="bg-current btn-round-xs rounded-lg font-xssss text-white fw-600">1</span><span className="font-xssss fw-500 text-dark-500 ml-2"></span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div className="d-flex justify-content-between" >
+
+                                                                                            <div className='border-black' ><a className="font-xssss" href="#">Assesments</a></div>
+                                                                                            <div className='border-black'><a className="font-xssss" href="#" >EBook</a></div>
+
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div> */}
+                                                        <Accordion
+                                                            defaultActiveKey="0"
+                                                            className="accordian mb-0 accordian-course"
+                                                        >
+
+                                                            {allSubjectData && allSubjectData.chapters ? (
+                                                                allSubjectData && allSubjectData.chapters.map((chapter, index) => (
+                                                                    <Accordion.Item
+                                                                        eventKey={index}
+                                                                        className="accordion-item border-0 mb-0 shadow-xss rounded-sm bg-white"
+                                                                    >
+                                                                        <Accordion.Header>
+                                                                            {chapter.chapter_name}
+                                                                        </Accordion.Header>
+                                                                        <Accordion.Body className='py-0'>
+                                                                            {allSubjectData.videos && allSubjectData.videos.map((video, videoIndex) => (
+                                                                                video.chapter_id === chapter.id ?
+                                                                                    <div className="card-body d-flex p-1 video"data-id={video.id} key={index} onClick={() => handleVideoClick(video.id, video.video_file, video.video_name)}>
+                                                                                        <i className='feather-play-circle mr-3 font-lg'></i>
+                                                                                        <div className="d-flex flex-column">
+                                                                                            <div>
+                                                                                                <span className="bg-current btn-round-xs rounded-lg font-xssss text-white fw-600">
+                                                                                                    1
+                                                                                                </span>
+                                                                                                <span className="font-xssss fw-500 text-grey-500 ml-2">
+                                                                                                    {video.video_name}
+                                                                                                </span>
+                                                                                            </div>
+                                                                                            <div className="d-flex justify-content-between">
+                                                                                                <div className='border-size-sm rounded-sm px-1' style={{ border: '1px solid #000' }}><a className="font-xssss" href="#">Assesments</a></div>
+                                                                                                <div className='border-size-sm rounded-sm px-1' style={{ border: '1px solid #000' }}><a className="font-xssss" href="#" >EBook</a></div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    :
+                                                                                    ""
+
+                                                                            ))}
+
+                                                                        </Accordion.Body>
+                                                                    </Accordion.Item>
+                                                                ))
+                                                            )
+                                                                :
+
+                                                                <Accordion.Item
+                                                                    eventKey="0"
+                                                                    className="accordion-item border-0 mb-0 shadow-xss rounded-sm bg-white"
+                                                                >
+
+                                                                </Accordion.Item>
+
+
+
+                                                            }
+
+
+                                                        </Accordion>
+
+
+                                                    </div>
                                                 </div>
+
+                                                {/* </div> */}
                                             </Tab>
                                             <Tab eventKey="chat" title="CHAT" className="list-inline-item " >
 
                                                 <div className="messages-content chat-wrapper scroll-bar p-3"
                                                     style={{ height: 400 }}
                                                     ref={chatContentRef}>
-                                                    <div className="message-item">
-                                                        <div className="message-user">
-                                                            <figure className="avatar">
-                                                                <img src="assets/images/user.png" alt="avater" />
-                                                            </figure>
-                                                            <div>
-                                                                <h5 className="font-xssss mt-2">Byrom Guittet</h5>
-                                                                <div className="time">01:35 PM</div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="message-wrap shadow-none">
-                                                            I'm fine, how are you
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="message-item">
-                                                        <div className="message-user">
-                                                            <figure className="avatar">
-                                                                <img src="assets/images/user.png" alt="avater" />
-                                                            </figure>
-                                                            <div>
-                                                                <h5 className="font-xssss mt-2">Byrom Guittet</h5>
-                                                                <div className="time">
-                                                                    01:35 PM
-                                                                    <i className="ti-double-check text-info"></i>
+                                                    {allSubjectData && allSubjectData.merged_messages ? (
+                                                        Object.values(allSubjectData.merged_messages).map((message, index) => (
+                                                            message.sender_id === userId ? (
+                                                                <div className="message-item outgoing-message" key={index}>
+                                                                    <div className="message-user">
+                                                                        <figure className="avatar">
+                                                                            <img src="/assets/images/user.png" alt="avater" />
+                                                                        </figure>
+                                                                        <div>
+                                                                            <h5>You</h5>
+                                                                            <div className="time">
+                                                                                01:35 PM
+                                                                                <i className="ti-double-check text-info"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="message-wrap">
+                                                                        {message.message}
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="message-wrap shadow-none">
-                                                            I want those files for you. I want you to send 1 PDF
-                                                            and 1 image file.
-                                                        </div>
-                                                    </div>
 
-                                                    <div className="message-item">
-                                                        <div className="message-user">
-                                                            <figure className="avatar">
-                                                                <img src="assets/images/user.png" alt="avater" />
-                                                            </figure>
-                                                            <div>
-                                                                <h5 className="font-xssss mt-2">Byrom Guittet</h5>
-                                                                <div className="time">01:35 PM</div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="message-wrap shadow-none">
-                                                            I've found some cool photos for our travel app.
-                                                        </div>
-                                                    </div>
+                                                            )
+                                                                :
+                                                                (
+                                                                    <div className="message-item">
+                                                                        <div className="message-user">
+                                                                            <figure className="avatar">
+                                                                                <img src="/assets/images/user.png" alt="avater" />
+                                                                            </figure>
+                                                                            <div>
+                                                                                <h5 className="font-xssss mt-2">Teacher</h5>
+                                                                                <div className="time">01:35 PM</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="message-wrap shadow-none">
+                                                                            {message.message}
+                                                                        </div>
+                                                                    </div>
+                                                                )
 
-                                                    <div className="message-item outgoing-message">
-                                                        <div className="message-user">
-                                                            <figure className="avatar">
-                                                                <img src="assets/images/user.png" alt="avater" />
-                                                            </figure>
-                                                            <div>
-                                                                <h5>You</h5>
-                                                                <div className="time">
-                                                                    01:35 PM
-                                                                    <i className="ti-double-check text-info"></i>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="message-wrap">
-                                                            Hey mate! How are things going ?
-                                                        </div>
-                                                    </div>
+                                                        ))
+                                                    )
 
-                                                    <div className="message-item">
-                                                        <div className="message-user">
-                                                            <figure className="avatar">
-                                                                <img src="assets/images/user.png" alt="avater" />
-                                                            </figure>
-                                                            <div>
-                                                                <h5 className="font-xssss mt-2">Byrom Guittet</h5>
-                                                                <div className="time">01:35 PM</div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="message-wrap shadow-none">
-                                                            I'm fine, how are you.
-                                                        </div>
-                                                    </div>
 
-                                                    <div className="message-item">
-                                                        <div className="message-user">
-                                                            <figure className="avatar">
-                                                                <img src="assets/images/user.png" alt="avater" />
-                                                            </figure>
-                                                            <div>
-                                                                <h5 className="font-xssss mt-2">Byrom Guittet</h5>
-                                                                <div className="time">
-                                                                    01:35 PM
-                                                                    <i className="ti-double-check text-info"></i>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="message-wrap shadow-none">
-                                                            I want those files for you. I want you to send 1 PDF
-                                                            and 1 image file.
-                                                        </div>
-                                                    </div>
+                                                        :
+                                                        <div className="message-item">
 
-                                                    <div className="message-item">
-                                                        <div className="message-user">
-                                                            <figure className="avatar">
-                                                                <img src="assets/images/user.png" alt="avater" />
-                                                            </figure>
-                                                            <div>
-                                                                <h5 className="font-xssss mt-2">Byrom Guittet</h5>
-                                                                <div className="time">01:35 PM</div>
-                                                            </div>
                                                         </div>
-                                                        <div className="message-wrap shadow-none">
-                                                            I've found some cool photos for our travel app.
-                                                        </div>
-                                                    </div>
+
+                                                    }
+
                                                 </div>
                                                 <form className="chat-form position-absolute bottom-0 w-100 left-0 bg-white z-index-1 p-3 shadow-xs theme-dark-bg ">
                                                     <button className="bg-grey float-left">
@@ -253,87 +343,27 @@ function SubjectStream() {
                                                 <div className="messages-content chat-wrapper scroll-bar p-3"
                                                     style={{ height: 400 }}
                                                     ref={noteContentRef}>
-                                                    <div className="message-item">
-                                                        <div className="message-user">
-                                                            <figure className="avatar">
-                                                                <img src="assets/images/user.png" alt="avater" />
-                                                            </figure>
-                                                            <div>
-                                                                <h5 className="font-xssss mt-2">Byrom Guittet</h5>
-                                                                <div className="time">01:35 PM</div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="message-wrap shadow-none">
-                                                            I'm fine, how are you
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="message-item">
-                                                        <div className="message-user">
-                                                            <figure className="avatar">
-                                                                <img src="assets/images/user.png" alt="avater" />
-                                                            </figure>
-                                                            <div>
-                                                                <h5 className="font-xssss mt-2">Byrom Guittet</h5>
-                                                                <div className="time">
-                                                                    01:35 PM
-                                                                    <i className="ti-double-check text-info"></i>
+                                                    {allSubjectData && allSubjectData.mini_projects ? (
+                                                        allSubjectData && allSubjectData.notes.map((note, index) => (
+                                                            <div className="message-item outgoing-message" key={index}>
+                                                                <div className="message-wrap">{note.note}</div>
+                                                                <div className="message-user">
+                                                                    <div>
+                                                                        <div className="time"><i
+                                                                            className="ti-double-check text-info"></i></div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div className="message-wrap shadow-none">
-                                                            I want those files for you. I want you to send 1 PDF
-                                                            and 1 image file.
-                                                        </div>
-                                                    </div>
+                                                        ))
+                                                    )
+                                                        :
 
-                                                    <div className="message-item">
-                                                        <div className="message-user">
-                                                            <figure className="avatar">
-                                                                <img src="assets/images/user.png" alt="avater" />
-                                                            </figure>
-                                                            <div>
-                                                                <h5 className="font-xssss mt-2">Byrom Guittet</h5>
-                                                                <div className="time">01:35 PM</div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="message-wrap shadow-none">
-                                                            I've found some cool photos for our travel app.
-                                                        </div>
-                                                    </div>
+                                                        <div className="message-item">
 
-                                                    <div className="message-item outgoing-message">
-                                                        <div className="message-user">
-                                                            <figure className="avatar">
-                                                                <img src="assets/images/user.png" alt="avater" />
-                                                            </figure>
-                                                            <div>
-                                                                <h5>You</h5>
-                                                                <div className="time">
-                                                                    01:35 PM
-                                                                    <i className="ti-double-check text-info"></i>
-                                                                </div>
-                                                            </div>
                                                         </div>
-                                                        <div className="message-wrap">
-                                                            Hey mate! How are things going ?
-                                                        </div>
-                                                    </div>
 
-                                                    <div className="message-item">
-                                                        <div className="message-user">
-                                                            <figure className="avatar">
-                                                                <img src="assets/images/user.png" alt="avater" />
-                                                            </figure>
-                                                            <div>
-                                                                <h5 className="font-xssss mt-2">Byrom Guittet</h5>
-                                                                <div className="time">01:35 PM</div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="message-wrap shadow-none">
-                                                            I'm fine, how are you.
-                                                        </div>
-                                                    </div>
+
+                                                    }
 
 
                                                 </div>
@@ -362,8 +392,15 @@ function SubjectStream() {
                                         className="card d-block border-0 rounded-lg overflow-hidden dark-bg-transparent bg-transparent mt-4 pb-4">
                                         <div className="row">
                                             <div className="col-8">
+                                                
+                                                    {/* {allSubjectData && allSubjectData.video_details ? (
+                                                        <h2 className="fw-700 font-md d-block lh-4 mb-2 title">
+                                                    {allSubjectData && allSubjectData.video_details.video_name }</h2>
+                                                    )
+                                                    
+                                                : ""} */}
                                                 <h2 className="fw-700 font-md d-block lh-4 mb-2 title">
-                                                    Video name</h2>
+                                                    {mainVideoTitle}</h2>
                                             </div>
                                             <div className="col-4 save-div">
                                                 <a href="#"
@@ -406,10 +443,23 @@ function SubjectStream() {
                                 </div>
                                 <div className="col-xl-12 col-xxl-12 col-lg-12">
                                     <div className="card d-block border-0 rounded-lg overflow-hidden p-4 shadow-xss mt-4 bg-lightblue" >
+                                        {allSubjectData && allSubjectData.test ? (
+                                            allSubjectData.test_result && allSubjectData.test_result.score_percentage >= 50 ? (
+                                                <a href="">
+                                                    <h2 className="fw-700 font-sm mt-1 pl-1">View certificate. <i className="ti-arrow-right font-sm text-dark float-right"></i></h2>
+                                                </a>
+                                            ) : (
+                                                <a href="">
+                                                    <h2 className="fw-700 font-sm mt-1 pl-1">Take test to get certified. <i className="ti-arrow-right font-sm text-dark float-right"></i></h2>
+                                                </a>
+                                            )
+                                        ) : (
+                                            <a href="#">
+                                                <h2 className="fw-700 font-sm mt-1 pl-1">Test coming soon!. <i className="ti-arrow-right font-sm text-dark float-right"></i></h2>
+                                            </a>
+                                        )}
 
-                                        <a href="#">
-                                            <h2 className="fw-700 font-sm mt-1 pl-1">Test coming soon!. <i className="ti-arrow-right font-sm text-dark float-right"></i></h2>
-                                        </a>
+
                                     </div>
                                 </div>
                                 <div className="col-lg-12 pt-2 mt-2">
@@ -425,8 +475,8 @@ function SubjectStream() {
                                                             className="card w200 d-block border-0 shadow-xss rounded-lg overflow-hidden mb-4">
 
                                                             <div className="card-image w-100 ">
-                                                                <img src={baseUrl+mini_project.project_image} alt="image"
-                                                                    className="w-100" style={{height:100}}/>
+                                                                <img src={baseUrl + mini_project.project_image} alt="image"
+                                                                    className="w-100" style={{ height: 100 }} />
                                                             </div>
                                                             <div className="card-body d-block w-100 pl-4 pr-4 pb-4 text-center">
 
@@ -435,7 +485,7 @@ function SubjectStream() {
                                                                     className="text-dark text-grey-900">
                                                                 </a>{mini_project.project_name}</h4>
                                                                 <p className="fw-500 font-xsssss text-grey-500 mt-0 mb-2">
-                                                                {mini_project.description}</p>
+                                                                    {mini_project.description}</p>
                                                                 <a href="#"
                                                                     className="text-dark text-grey-900">
                                                                     <span

@@ -16,8 +16,7 @@ import {clearSessionStorage} from '../pages/util/SessionStorage';
     // Clear user data from session storage
     clearSessionStorage();
     // Redirect to the login pagfe or perform any other necessary logout actions.
-    console.log(122);
-    navigate('/');
+    // console.log(122);
   };
 
     return (
