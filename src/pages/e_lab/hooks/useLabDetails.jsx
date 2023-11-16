@@ -1,0 +1,108 @@
+import { useState, useEffect } from 'react';
+
+const useLabDetails = (labId, selectedLevel,setCode) => {
+ 
+    const baseUrl = process.env.REACT_APP_BASE_URL;
+
+  const [labs, setLabs] = useState({});
+  const [testCases, setTestCases] = useState([]);
+  const [harnessCode, setHarnessCode] = useState('');
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchLabDetails = async () => {
+      if (!labId) return;
+
+      try {
+        const response = await fetch(`${baseUrl}/api/get_lab/${labId}`);
+
+          const jsonResponse = await response.json();
+  
+          // Check if the jsonResponse contains 'data' and 'data' contains 'template'
+          if (
+            jsonResponse.success &&
+            jsonResponse.data &&
+            (jsonResponse.data.template1 || jsonResponse.data.template2)
+          ) {
+            if (selectedLevel === "Level 1" && jsonResponse.data.template1) {
+              const formattedTemplate1 = jsonResponse.data.template1.replace(
+                /\\n/g,
+                "\n"
+              );
+              setCode(formattedTemplate1);
+            } else if (
+              selectedLevel === "Level 2" &&
+              jsonResponse.data.template2
+            ) {
+              const formattedTemplate2 = jsonResponse.data.template2.replace(
+                /\\n/g,
+                "\n"
+              );
+              setCode(formattedTemplate2);
+            }
+            //   console.log("Formatted template:", formattedTemplate);
+          } else {
+            setCode("// Error: Template not found.");
+            console.log(
+              "Error: Template not found in the response.",
+              jsonResponse
+            );
+          }
+  
+          //    Verify that data.data and data.data.testcase exist
+          if (jsonResponse.data && jsonResponse.data.testcase) {
+            let testcaseParsed;
+            try {
+              // Make sure data.data.testcase is a string before parsing
+              if (typeof jsonResponse.data.testcase === "string") {
+                testcaseParsed = JSON.parse(jsonResponse.data.testcase);
+                setLabs(jsonResponse); // Update the labs state with the fetched data
+                setTestCases(JSON.parse(jsonResponse.data.testcase));
+              } else {
+                // If it's not a string, it might already be the correct format
+                testcaseParsed = jsonResponse.data.testcase;
+              }
+  
+              // Log the parsed testcase to verify its structure
+              console.log("Parsed testcase:", testcaseParsed);
+  
+              // Check if testcaseParsed is an array
+              if (Array.isArray(testcaseParsed)) {
+                setLabs({ ...jsonResponse.data, testcase: testcaseParsed });
+              } else {
+                console.error("Parsed testcase is not an array:", testcaseParsed);
+              }
+              let dataHarnessCodeParsed;
+              if (typeof jsonResponse.data.data_harness_code === "string") {
+                // Replace '\n' with actual newline characters
+                dataHarnessCodeParsed =
+                  jsonResponse.data.data_harness_code.replace(/\\n/g, "\n");
+                setHarnessCode(dataHarnessCodeParsed); // Assuming you have a state setter named 'setDataHarnessCode'
+              } else {
+                dataHarnessCodeParsed = jsonResponse.data.data_harness_code;
+                console.log("Data Harness Code:", dataHarnessCodeParsed);
+              }
+            } catch (parseError) {
+              console.error("Error parsing testcase:", parseError);
+            }
+          } else {
+            console.error(
+              "data.data or data.data.testcase is undefined",
+              jsonResponse
+            );
+          }
+
+      } catch (error) {
+        console.error("Error fetching lab details:", error);
+        setCode("// Error: Could not fetch lab details.");
+        setError(error);
+      }
+    };
+
+    fetchLabDetails();
+  }, [labId, selectedLevel,setCode]);
+
+  return {  labs, testCases, harnessCode, error };
+};
+
+export default useLabDetails;
