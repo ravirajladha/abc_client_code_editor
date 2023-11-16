@@ -81,7 +81,7 @@ import Homefive from "./pages/Homefive";
 import Homesix from "./pages/Homesix";
 import Homefour from "./pages/Homefour";
 
-import { BrowserRouter, Switch, Route, Routes } from "react-router-dom";
+import { HashRouter, Switch, Route, Routes } from "react-router-dom";
 import * as serviceWorker from "./serviceWorker";
 
 //added by sr
@@ -102,7 +102,7 @@ import SubjectStream from "./pages/student/SubjectStream";
 class Root extends Component {
   render() {
     return (
-      <BrowserRouter>
+     <HashRouter>
         <Routes>
           <Route path="/editor/:labId" element={<Editor />} />
           <Route path="/editor1/:labId" element={<Editor1 />} />
@@ -115,7 +115,7 @@ class Root extends Component {
           <Route path="/subject_stream/:subjectId" element={<SubjectStream />}
           />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     );
   }
 }
