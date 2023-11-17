@@ -59,7 +59,7 @@ function CreateLab(props) {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:8000/api/add_lab', {
+      const response = await fetch(baseUrl+'api/add_lab', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ console.log(formData)
                                   <div className="row">
                                     <div className="col-lg-6">
                                       <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label txt-full-width">
-                                        <label className="mont-font fw-600 font-xsss">Select Class</label><br />
+                                        <label className="mont-font fw-600 font-xsss">Select Class1</label><br />
                                         <select name="course" id="course" className="form-control" onChange={handleInputChange}>
                                           <option readonly disabled selected value="">-Select-</option>
                                           {classes.map((classDetail) => (
