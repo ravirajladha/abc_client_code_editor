@@ -14,7 +14,7 @@ const useLabDetails = (labId, selectedLevel,setCode) => {
       if (!labId) return;
 
       try {
-        const response = await fetch(`${baseUrl}/api/get_lab/${labId}`);
+        const response = await fetch(`${baseUrl}api/get_lab/${labId}`);
 
           const jsonResponse = await response.json();
   

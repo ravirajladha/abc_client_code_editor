@@ -12,10 +12,11 @@ import 'ace-builds/src-noconflict/theme-github';
 function CreateLab(props) {
   //fetch the records from api and store in classes dropdown
   const [classes, setClasses] = useState([]);
+  const baseUrl = process.env.REACT_APP_BASE_URL;
 
   const fetchClasses = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/get_classes');
+      const response = await fetch(baseUrl + 'api/get_classes');
       const data = await response.json();
       setClasses(data.data); // Assuming the API returns an array of class details
     } catch (error) {
