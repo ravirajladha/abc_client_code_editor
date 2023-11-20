@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-// import './index.css'
+import './index.css'
 import "./main.scss";
-// import './App.css';
+import './App.css';
 // Common Layout
 import Demo from "./demo/Demo";
 
@@ -82,7 +82,7 @@ import Homesix from "./pages/Homesix";
 import Homefour from "./pages/Homefour";
 
 import { HashRouter, Switch, Route, Routes } from "react-router-dom";
-import * as serviceWorker from "./serviceWorker";
+
 
 //added by sr
 import Editor from "./pages/e_lab/components/Editor";
@@ -98,31 +98,27 @@ import AnswerForum from "./pages/student/AnswerForum";
 import Settings from "./pages/student/Settings";
 import StudentRoute from "./pages/util/StudentRoute";
 import SubjectStream from "./pages/student/SubjectStream";
+// Convert class component to functional component
+const Root = () => {
+  return (
+    <HashRouter basename="/">
+      <Routes>
+        <Route path="/editor/:labId" element={<Editor />} />
+        <Route path="/editor1/:labId?" element={<Editor1 />} />
+        <Route path="/demo" element={<Demo />} />
+        <Route path="/create_lab" element={<CreateLab />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/subject_stream/:subjectId" element={<SubjectStream />} />
+      </Routes>
+    </HashRouter>
+  );
+};
 
-class Root extends Component {
-  render() {
-    return (
-     <HashRouter>
-        <Routes>
-          <Route path="/editor/:labId" element={<Editor />} />
-          <Route path="/editor1/:labId" element={<Editor1 />} />
-          <Route path="/demo" element={<Demo />} />
-          <Route path="/create_lab" element={<CreateLab />} />
-          <Route path="/" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/subject_stream/:subjectId" element={<SubjectStream />}
-          />
-        </Routes>
-      </HashRouter>
-    );
-  }
-}
-
-ReactDOM.render(<Root />, document.getElementById("root"));
-serviceWorker.register();
-
+// Use ReactDOM.render to mount the Root component
+ReactDOM.render(<Root />, document.getElementById('root'));
 // import React from 'react'
 // import ReactDOM from 'react-dom/client'
 // import { RouterProvider, createBrowserRouter } from 'react-router-dom'

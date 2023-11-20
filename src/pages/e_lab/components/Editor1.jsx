@@ -5,7 +5,7 @@ import Split from "react-split";
 import { classnames } from "../utils/general";
 
 import Timer from "./Timer";
-import useLabDetails from '../hooks/useLabDetails';
+import useLabDetails from "../hooks/useLabDetails";
 import {
   AiOutlineFullscreen,
   AiOutlineFullscreenExit,
@@ -30,7 +30,7 @@ import OutputDetails from "./OutputDetails";
 import { useParams } from "react-router-dom";
 import Accordion from "./Accordion";
 
-function Home() {
+function Editor1() {
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const [code, setCode] = useState("Editor Loading...");
   const [activeTab, setActiveTab] = useState("testcases");
@@ -38,14 +38,20 @@ function Home() {
   // const [testCases, setTestCases] = useState([]);
   // const [harnessCode, setHarnessCode] = useState();
   // const [labs, setLabs] = useState({ testcase: [] });
-  const { labId } = useParams();
-  const [selectedLevel, setSelectedLevel] = useState("Level 1");
+
+  let { labId } = useParams();
+
+  // If labId is undefined, set a default value
+  // const effectiveLabId = labId || "26";
+
+  const effectiveLabId = labId ;
+    const [selectedLevel, setSelectedLevel] = useState("Level 1");
   const handleLevelChange = (level) => {
     setSelectedLevel(level);
     // Optionally, you can fetch the lab details again here if needed
   };
 
-  // const [code, setCode] = useState("Editor Loading..."); 
+  // const [code, setCode] = useState("Editor Loading...");
   useEffect(() => {
     console.log("The code has been updated:", code);
   }, [code]);
@@ -64,9 +70,20 @@ function Home() {
     }
   };
 
-  const { labs, testCases, harnessCode, error } = useLabDetails(labId, selectedLevel,setCode);
+  const { labs, testCases, harnessCode, error } = useLabDetails(
+    effectiveLabId,
+    selectedLevel,
+    setCode
+  );
+  useEffect(() => {
+    if (error) {
+      console.error("Error fetching lab details:", error);
+      // Handle the error state here, such as showing a message to the user
+    }
+    // You can also handle any other effects that need to run when labs, testCases, or harnessCode changes
+  }, [effectiveLabId, selectedLevel, error]);
 
-
+  console.log(error);
   const notify = (message) => toast(message);
 
   const [outputDetails, setOutputDetails] = useState(null);
@@ -91,7 +108,7 @@ function Home() {
     // Prepare the data to be sent
     const dataToSend = {
       code: code,
-      lab_id: labId,
+      lab_id: effectiveLabId,
       language: language.id,
       status: outputDetails?.status?.description,
       memory: outputDetails?.memory,
@@ -103,7 +120,7 @@ function Home() {
     console.log(dataToSend);
     try {
       const response = await axios.post(
-        baseUrl+"api/submit_code",
+        baseUrl + "api/submit_code",
         dataToSend,
         {
           headers: {
@@ -370,8 +387,6 @@ function Home() {
   };
   const [activeTestCaseId, setActiveTestCaseId] = useState(null);
 
-
-
   // modal javascript
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [settings, setSettings] = useState({
@@ -482,7 +497,7 @@ function Home() {
         </div>
       </nav>
       <Split className="split " minSize={0}>
-      <Accordion labs={labs} />
+        <Accordion labs={labs} />
 
         {/* pd ends */}
         <div className="bg-white-fill-2  ">
@@ -869,4 +884,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Editor1;

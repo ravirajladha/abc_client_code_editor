@@ -11,7 +11,10 @@ const useLabDetails = (labId, selectedLevel,setCode) => {
 
   useEffect(() => {
     const fetchLabDetails = async () => {
-      if (!labId) return;
+      // if (!labId) {
+      //   labId = 21;
+      // }
+      console.log(`${baseUrl}api/get_lab/${labId}`);
 
       try {
         const response = await fetch(`${baseUrl}api/get_lab/${labId}`);

@@ -1,6 +1,7 @@
-@tailwind base;
+@import 'bootstrap/dist/css/bootstrap.min.css';
+/* @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; */
 
 
 /* @layer components {

@@ -2,7 +2,7 @@
   "name": "combined-project",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://kods.tech/code_editor_react/",
+  "homepage": "https://bvishvin.kods.app",
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.12.1",
     "@codemirror/lang-java": "^6.0.1",
@@ -41,6 +41,8 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
+    "@babel/core": "^7.23.3",
+    "@babel/preset-react": "^7.23.3",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react": "^4.0.3",
@@ -53,7 +55,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "CI=false react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
